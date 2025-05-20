@@ -1,0 +1,46 @@
+{
+  "en": {
+    "title": "Worksheet Wizard",
+    "tabs": {
+      "template": "Template",
+      "accounts": "Accounts",
+      "totals": "Totals",
+      "reminders": "Initiate Reminders"
+    },
+    "buttons": {
+      "cancel": "Cancel",
+      "start_over": "Start Over",
+      "next_step": "Next Step",
+      "build_worksheet": "Build Worksheet"
+    },
+    "labels": {
+      "available_accounts": "Available Accounts",
+      "selected_accounts": "Selected Accounts",
+      "view_by": "View By:",
+      "filter_by_currency": "Filter by Currency:",
+      "search_account": "Search Account:"
+    }
+  },
+  "fr": {
+    "title": "Assistant de feuille de calcul",
+    "tabs": {
+      "template": "Modèle",
+      "accounts": "Comptes",
+      "totals": "Totaux",
+      "reminders": "Initier des rappels"
+    },
+    "buttons": {
+      "cancel": "Annuler",
+      "start_over": "Recommencer",
+      "next_step": "Étape suivante",
+      "build_worksheet": "Construire une feuille de calcul"
+    },
+    "labels": {
+      "available_accounts": "Comptes disponibles",
+      "selected_accounts": "Comptes sélectionnés",
+      "view_by": "Afficher par :",
+      "filter_by_currency": "Filtrer par devise :",
+      "search_account": "Rechercher un compte :"
+    }
+  }
+}

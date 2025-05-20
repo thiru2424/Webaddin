@@ -1,0 +1,792 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.popup-heading {
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.tabs {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 2px solid #ccc;
+}
+
+.tab {
+    -ms-flex: 1;
+    flex: 1;
+    padding: 10px;
+    cursor: pointer;
+    background-color: lightblue;
+    border: none;
+    text-align: center;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.tab:last-child {
+    margin-right: 0;
+}
+
+.tab.active {
+    background-color: darkblue;
+    color: white;
+}
+
+.tab-content {
+    padding: 20px;
+    display: block;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Template Layout */
+.template-layout {
+    display: flex;
+    gap: 10px;
+}
+
+/* General Box Styling */
+.box {
+    background-color: white;
+    color: black;
+    border: 1px solid blue;
+    border-radius: 8px;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    align-items: flex-start; /* Aligns text to the left */
+    padding: 20px;
+    padding-top: 15px; /* Adjust for spacing */
+    position: relative;
+}
+
+/* Left Box */
+.left-box {
+    width: 40%;
+    height: 387px;
+}
+
+/* Right Column */
+.right-column {
+    width: 55%;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Right Box */
+.right-box {
+    height: 70px;
+}
+
+/* Bottom Box */
+.bottom-box {
+    height: 269px;
+}
+
+/* Title inside the left border */
+.box-title {
+    display: inline-block;
+    background: white;
+    color: blue;
+    font-size: 11px;
+    font-weight: bold;
+    position: absolute;
+    top: -7px; /* Moves the title into the cut border space */
+}
+
+/* Creates the border cut effect */
+.box::before {
+    content: "";
+    position: absolute;
+    top: -4px;
+    left: 10;
+    width: 30px;  /* Width of the border cut */
+    height: 10px;
+    background: white; /* Covers part of the border */
+}
+
+.box-text {
+    font-size: 11px;
+    font-weight: bold;
+    color: black;
+    margin-top: 6px;
+}
+
+/* Adds space after the text */
+.spacer {
+    height: 20px;
+}
+
+/* Aligns radio buttons and question mark */
+.radio-group {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 10px;
+}
+
+/* Styles the question mark icon */
+.question-mark {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    background-color: blue;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+/* Styles the example link */
+.example-link {
+    display: block;
+    font-size: 10px;
+    color: blue;
+    text-decoration: underline;
+    margin-top: 5px;
+    margin-left: 20px;
+}
+
+/* Adjust radio label font */
+.radio-group label {
+    font-size: 11px;  /* Adjust font size */
+    color: black;     /* Ensures consistency */
+}
+
+/* Ensure radio button, label, and question mark are properly aligned */
+.radio-group {
+    display: flex;
+    align-items: center; /* Ensures vertical alignment */
+    gap: 5px;
+    margin-top: 10px;
+}
+
+/* Horizontal radio buttons */
+.radio-group.horizontal {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Space between radio options */
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+/* Adjust radio label font */
+.radio-group label {
+    font-size: 11px;  /* Adjust font size */
+    font-weight: 500; /* Medium weight for better readability */
+    color: black;
+}
+
+/* Style the table */
+.accounts-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+/* Style the header row */
+.accounts-table thead {
+    background-color: gray;
+    color: white;
+    font-weight: normal;
+    font-size:10px;
+}
+
+/* Style header cells */
+.accounts-table th {
+    padding: 8px;
+    text-align: center;
+    border: 1px solid #ccc;
+}
+
+/* Style value row */
+.accounts-table td {
+    background-color: white;
+    padding: 8px;
+    text-align: left;
+    border: 1px solid #ccc;
+    font-size:10px;
+}
+
+/* Style the second table (no headers) */
+.accounts-secondary-table {
+    width: 50%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+/* Style left column with gray background */
+.accounts-secondary-table td:first-child {
+    background-color: gray;
+    color: white;
+    font-size:10px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+
+/* Style right column with white background */
+.accounts-secondary-table td:last-child {
+    background-color: white;
+    padding: 8px;
+    border: 1px solid #ccc;
+    font-size:10px;
+    text-align: center;
+}
+
+/* Container for buttons */
+.popup-buttons {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 1px;
+    border-top: 1px solid #ccc; /* Adds a subtle separator */
+}
+
+/* Group buttons in left and right sections */
+.button-group {
+    display: flex;
+    gap: 10px;
+}
+
+/* General button styling */
+.btn {
+    padding: 6px 8px;
+    font-size: 10px;
+    border: 1px solid black;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Gray background buttons */
+.btn-gray {
+    background-color: lightgray;
+    color: black;
+}
+
+/* Disabled buttons (greyed out) */
+.btn-disabled {
+    background-color: white;
+    color: darkgray;
+    cursor: not-allowed;
+}
+
+/* Modal Background (Hidden by Default) */
+.modal {
+    display: none; /* Hidden initially */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Modal Content (Centered) */
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 80%;
+    max-height: 80%;
+    position: relative;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Close Button */
+.close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Image Styling */
+.modal-content img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 5px;
+}
+
+/* Add hover effect */
+.example-link:hover {
+    color: darkblue;
+    text-decoration: none;
+}
+
+/* Left Box */
+.full-width-box {
+    width: 94%;
+    display: block;
+    clear: both;
+    margin-bottom: 6px;
+}
+.full-width-bottom-box {
+    width: 94%;
+    display: block;
+    clear: both;
+    margin-bottom: -6px;
+}
+
+/* Table Styling */
+.filter-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Hide table borders */
+.filter-table th,
+.filter-table td {
+    border: none;
+    text-align: left;
+}
+
+/* Table Header Styling */
+.filter-table th {
+    font-size: 10px;
+    font-weight: normal;
+    text-align: left;
+    padding-bottom: 5px;
+}
+
+/* Input Fields */
+.form-input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 10px;
+}
+
+/* Icon Button Styling */
+.icon-button {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 5px;
+}
+
+/* Funnel (Filter) Icon */
+.filter-icon {
+    color: blue;
+}
+
+/* Remove Filter Icon */
+.remove-filter-icon {
+    color: red;
+}
+
+/* Asterisk in red */
+.asterisk {
+    color: red;
+    font-size: 10px;
+}
+
+/* Container for "View By" section */
+.view-by-container {
+    display: flex;
+    align-items: left; /* Ensures everything is vertically aligned */
+    justify-content: left; /* Centering inside the box */
+}
+
+/* Style for "View By" text */
+.view-by-text {
+    font-size: 11px;
+    font-weight: normal;
+    margin-top: 12px;
+    margin-right: 20px;
+}
+/* Table Styling */
+.account-table {
+    width: 94%;
+    border-collapse: collapse;
+    margin-top: 5px;
+    border: 0.5px solid lightblue;
+    min-height: 225px; /* Adjust height to fit approximately 6 rows */
+    max-height: 225px; /* Adjust height to fit approximately 6 rows */
+    table-layout: fixed;
+}
+.account-table thead {
+    display: table;
+    width: 100%;
+    table-layout: fixed; /* Ensures columns are evenly spaced */
+}
+
+/* Adjust column widths */
+.account-table th:nth-child(1), 
+.account-table td:nth-child(1) {
+    width: 80%; /* More space for Accounts */
+}
+
+.account-table th:nth-child(2), 
+.account-table td:nth-child(2) {
+    width: 20%; /* Less space for CCY */
+}
+
+/* Table Headers */
+.account-table th {
+    background-color: rgb(217, 243, 243);
+    color: black;
+    font-size: 10px;
+    text-align: left;
+    padding: 8px;
+    cursor: pointer;
+    position: relative;
+}
+
+/* Optional: Add a small arrow indicator */
+.account-table th::after {
+    content: " ⬍"; /* Sorting icon */
+    font-size: 11px;
+    color: black;
+}
+
+/* Table Body (Scrollable) */
+.account-table tbody {
+    display: block;
+    overflow-y: auto;
+    width: 98%;
+    max-height: 160px; /* Matches container height */
+}
+
+/* Table Rows */
+.account-table tbody tr {
+    display: table;
+    width: 98%;
+    cursor: pointer;
+    table-layout: fixed; /* Keeps column sizes fixed */
+}
+
+/* Table Rows */
+.account-table td {
+    padding: 6px;
+    font-size: 10px;
+    text-align: left;
+}
+
+.scrollable-table {
+    width: 100%;
+    overflow-y: auto; /* Enable vertical scrolling */
+    display: block;
+}
+
+/* Alternate row colors */
+.account-table tbody tr:nth-child(odd) {
+    background-color: #f2f2f2; /* Light gray */
+}
+
+.account-table tbody tr:nth-child(even) {
+    background-color: white; /* White */
+}
+
+/* Container for list selection */
+.list-selection-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Button group styling */
+.list-button-group {
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column; /* Stack buttons vertically */
+    align-items: center; /* Center buttons */
+    justify-content: center; /* Align with table height */
+    margin-right: 20px;
+    gap: 8px;
+}
+
+/* Buttons for moving accounts */
+.list-button {
+    padding: 4px 8px;
+    font-size: 11px;
+    cursor: pointer;
+    border: 1px solid black;
+    border-radius: 4px;
+    background-color: lightgray;
+    color: black;
+    width: 90px; /* Ensure uniform button width */
+    text-align: center;
+}
+
+.list-button:hover {
+    background-color: darkblue;
+}
+
+.account-layout {
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column; /* Stack buttons vertically */
+}
+
+/* Highlight selected row */
+.selected {
+    background-color: lightblue !important;
+}
+
+/* Summary container */
+.account-summary {
+    width:90%;
+    text-align: right;
+    font-size: 8px;
+    font-weight: normal;
+    margin-top: 5px;
+}
+
+/* Totals Options: Checkboxes & Dropdown */
+.totals-options {
+    display: flex;
+    align-items: center;
+    gap: 70px; /* Space between elements */
+    margin-top: -10px;
+}
+
+/* Checkbox labels */
+.totals-options label {
+    display: flex;
+    align-items: center;
+    gap: 2px; /* Space between checkbox and text */
+    font-size: 11px;
+}
+
+/* Dropdown */
+#base-currency-dropdown {
+    padding: 5px;
+    font-size: 11px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+/* Payments Total Pending Section */
+.payments-total {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Space between elements */
+    margin-top: 4px;
+}
+
+/* Payments Label */
+.payments-label {
+    font-size: 11px;
+    font-weight: bold;
+    margin-right: -5px;
+}
+
+/* Checkbox labels */
+.payments-total label {
+    display: flex;
+    align-items: center;
+    gap: 2px; /* Space between checkbox and text */
+    font-size: 11px;
+}
+
+.box-text-total {
+    font-size: 11px;
+    font-weight: bold;
+    color: black;
+    margin-top: 2px;
+}
+
+/* Table Styling */
+.transaction-table {
+    width: 94%;
+    border-collapse: collapse;
+    margin-top: 5px;
+    border: 0.5px solid lightblue;
+    min-height: 150px; /* Adjust height to fit approximately 6 rows */
+    max-height: 150px; /* Adjust height to fit approximately 6 rows */
+    table-layout: fixed;
+}
+.transaction-table thead {
+    display: table;
+    width: 100%;
+    table-layout: fixed; /* Ensures columns are evenly spaced */
+}
+
+/* Adjust column widths */
+.transaction-table th:nth-child(1), 
+.transaction-table td:nth-child(1) {
+    width: 100%; /* More space for Accounts */
+}
+
+/* Table Headers */
+.transaction-table th {
+    background-color: rgb(217, 243, 243);
+    color: black;
+    font-size: 10px;
+    text-align: left;
+    padding: 8px;
+    cursor: pointer;
+    position: relative;
+}
+
+/* Optional: Add a small arrow indicator */
+.transaction-table th::after {
+    content: " ⬍"; /* Sorting icon */
+    font-size: 11px;
+    color: black;
+}
+
+/* Table Body (Scrollable) */
+.transaction-table tbody {
+    display: block;
+    overflow-y: auto;
+    width: 98%;
+    max-height: 100px; /* Matches container height */
+}
+
+/* Table Rows */
+.transaction-table tbody tr {
+    display: table;
+    width: 98%;
+    cursor: pointer;
+    table-layout: fixed; /* Keeps column sizes fixed */
+}
+
+/* Table Rows */
+.transaction-table td {
+    padding: 6px;
+    font-size: 10px;
+    text-align: left;
+}
+
+.help-link-reminder {
+    font-size: 11px;
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+    margin-top:-10px;
+}
+
+.help-link-reminder:hover {
+    color: darkblue;
+}
+
+/* Flex container for header */
+.reminder-header {
+    display: flex;
+    justify-content: space-between; /* Align heading left, link right */
+    align-items: center;
+}
+
+/* Container to structure the rows properly */
+.reminder-container {
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    gap: 10px; /* Space between rows */
+}
+
+/* Each row inside the container */
+.reminder-row {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between elements */
+}
+
+/* Ensure the select and input fields align properly */
+.reminder-row select,
+.reminder-row input[type="text"] {
+    padding: 5px;
+    font-size: 11px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Labels should have consistent spacing */
+.reminder-row label {
+    margin-right: 10px;
+}
+
+/* Aligns radio buttons and question mark */
+.reminder-group {
+    margin-top:0px;
+}
+
+.reminder-pay {
+    margin-left:111px;
+}
+
+.reminder-template {
+    margin-left:130px;
+}
+
+.reminder-from {
+    margin-left:188px;
+}
+
+/* Table Styling */
+.reminder-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 5px;
+    border: 0.5px solid lightblue;
+    min-height: 140px; /* Adjust height to fit approximately 6 rows */
+    max-height: 140px; /* Adjust height to fit approximately 6 rows */
+    table-layout: fixed;
+}
+.reminder-table thead {
+    display: table;
+    width: 100%;
+    table-layout: fixed; /* Ensures columns are evenly spaced */
+}
+
+/* Table Headers */
+.reminder-table th {
+    background-color: rgb(217, 243, 243);
+    color: black;
+    font-size: 10px;
+    text-align: left;
+    padding: 8px;
+    cursor: pointer;
+    position: relative;
+}
+
+/* Optional: Add a small arrow indicator */
+.reminder-table th::after {
+    content: " ⬍"; /* Sorting icon */
+    font-size: 11px;
+    color: black;
+}
+
+/* Table Body (Scrollable) */
+.reminder-table tbody {
+    display: block;
+    overflow-y: auto;
+    width: 100%;
+    max-height: 100px; /* Matches container height */
+}
+
+/* Table Rows */
+.reminder-table tbody tr {
+    display: table;
+    width: 100%;
+    cursor: pointer;
+    table-layout: fixed; /* Keeps column sizes fixed */
+}
+
+/* Table Rows */
+.reminder-table td {
+    padding: 6px;
+    font-size: 9px;
+    text-align: left;
+}

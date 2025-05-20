@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <title>Exchange rate</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/9.6.1/css/fabric.min.css"/>
+    <title>Exchange Rate Tool</title> 
+    <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+    <link href="fxRate.css" rel="stylesheet" type="text/css" />
+</head>
+<body class="body-layout">
+    <div class="dialog">
+        <div class="columns">
+            <!-- Left Column -->
+            <div class="column column--left">
+                <div class="heading-primary"><strong>Currencies</strong></div>
+                <div class="border-box">
+                    <p class="note">Select a Target Currency and one or more Available Currencies to build an Exchange Rate table.</p>
+                    <div class="target-currency">
+                        <label for="targetCurrency" class="heading-secondary">Target Currency</label>
+                        <select id="targetCurrency" class="currency-dropdown">
+                            <option value="" disabled selected>Select</option>
+                        </select>
+                    </div>
+                    <label for="currencyConvert" class="heading-secondary">Currencies to Convert</label>
+                    <div>
+                        <div class="select-wrapper">
+                            <label for="currencyList" class="currency-label">Available Currencies</label>
+                            <select id="currencyList" multiple size="11" class="currency-select"></select>
+                        </div>
+                    </div>
+                    <button id="addButton" disabled>Add</button>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="column column--right">
+                <div class="heading-primary"><strong>Currencies to be converted</strong></div>
+                <div class="border-box">
+                    <p class="note">Note: Rates are estimates and should be used for informational purposes only.These may not reflect rates that are used when creating payments</p>
+                    <div class="currency-table-box">
+                        <div class="currency-header">
+                            <span>From Currency</span>
+                            <span style="float: right;">To Currency</span>
+                        </div>
+                        <select id="selectedCurrencyList" class="selected-currency-list" multiple size="14"></select>
+                        <button id="deleteButton" disabled>Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <button id="buildButton" class="btn-build" disabled>Build Exchange Table</button>
+            <button id="closeButton" class="btn-build" onclick="closeFXDialog()">Close</button>
+        </div>
+    </div>
+</body>
+</html>
