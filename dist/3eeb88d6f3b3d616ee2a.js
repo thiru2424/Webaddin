@@ -1,0 +1,1 @@
+function sendStringToParentPage(){const t=document.getElementById("name-box").value;Office.context.ui.messageParent(t)}async function tryCatch1(t){try{await t()}catch(t){}}Office.onReady((()=>{window.location.href="https://developer.jpmorgan.com",document.getElementById("ok-button").onclick=()=>tryCatch1(sendStringToParentPage)}));

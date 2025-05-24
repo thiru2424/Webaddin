@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head lang="en">
+        <title>Dialog for My Office Add-in</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- For more information on Fluent UI, visit https://developer.microsoft.com/fluentui. -->
+        <link rel="stylesheet" href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/9.6.1/css/fabric.min.css"/>
+
+        <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+        <link href="trends.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div>
+    
+<div class="tab-content " id="accounts">
+            <div class="account-layout">
+                <div class="box full-width-box">
+                    <span class="box-title">Date filter</span>
+                    <table class="filter-table">
+                        <thead>
+                            <tr>
+                                <th>Date Option</th>
+                                <th id="startHead">From</th>
+                                <th id="endHead">To</th>
+                                <th></th> <!-- Empty column for Filter button -->
+                                <th></th> <!-- Empty column for Remove Filter button -->
+                            </tr>
+                        </thead>
+                       <tbody>
+ <tr class="date-row">
+  <td>
+    <select id="dateOption" class="form-input">
+      <option value="range">Date Range</option>
+      <option value="prior">Prior Day</option>
+      <option value="specific">Specific Date</option>
+    </select>
+
+  </td>
+  <td>
+    <input type="date" id="startDate" class="form-input date-input" />
+  </td>
+  <td>
+    <input type="date" id="endDate" class="form-input date-input" />
+  </td>
+   <td colspan="3">
+    <div id="dateError" class="date-error-message"></div>
+  </td>
+</tr>
+
+</tbody>
+
+                    </table>                                     
+                </div>
+                <div class="box full-width-box">
+                    <span class="box-title">Filter available accounts</span>
+                    <table class="filter-table">
+                        <thead>
+                            <tr>
+                                <th>Currency</th>
+                                <th>Account Number</th>
+                                <th>Account Name</th>
+                                <th></th> <!-- Empty column for Filter button -->
+                                <th></th> <!-- Empty column for Remove Filter button -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <select title="currencies" id="filterCurrency" class="form-input">
+                                        <option value="All">All</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="text" style='width:80%' id="filterAccount" class="form-input" placeholder="Enter account number">
+                                </td>
+                                <td>
+                                    <input type="text" style='width:80%' id="filterAccountName" class="form-input" placeholder="Enter account name">
+                                </td>
+                                <td>
+                                    <button id="applyFilter" class="icon-button filter-icon">🔽</button>
+                                </td>
+                                <td>
+                                    <button id="removeFilter" class="icon-button remove-filter-icon">❌</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>                                     
+                </div> 
+                <div class="box full-width-bottom-box">
+                    <span class="box-title">Accounts <span class="asterisk">*</span></span>
+                    <p class="box-text">Pick up to 150 accounts for your worksheet. Use the filter section above to narrow your list of accounts</p>
+                    <div class="view-by-container">
+                        <span class="view-by-text">View By:</span>
+                        
+                        <div class="radio-group">
+                            <input type="radio" id="view-account-number" name="viewBy" checked>
+                            <label for="view-account-number">Account Number</label>
+                
+                            <input type="radio" id="view-account-name" name="viewBy">
+                            <label for="view-account-name">Account Name</label>
+                        </div>
+                    </div>  
+                    <!-- Available Accounts Table -->
+                    <div class="list-selection-container">
+                        <div class="list-box">
+                            <div class="scrollable=table">
+                                <table id="available-accounts" class="account-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Available Accounts</th>
+                                            <th>CCY</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Rows will be populated dynamically from localStorage -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="account-summary">
+                                <span id="accounts-total">0 Accounts</span>, 
+                                <span id="accounts-selected">0 Selected</span>
+                            </div>                            
+                        </div>
+                        <!-- Buttons to Move Accounts -->
+                        <div class="list-button-group">
+                            <button id="add-btn" class="list-button">Add &gt;</button>
+                            <button id="add-all-btn" class="list-button">Add All &gt;</button>
+                            <button id="remove-btn" class="list-button">&lt; Remove</button>
+                            <button id="remove-all-btn" class="list-button">&lt; Remove All</button>
+                        </div>
+                        <!-- Selected Accounts Table (Initially Empty) -->
+                        <div class="list-box">
+                            <div class="scrollable-table">
+                                <table id="selected-accounts" class="account-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Selected Accounts</th>
+                                            <th>CCY</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- This will be initially empty -->
+                                    </tbody>
+                                </table>                               
+                            </div> 
+                            <div class="account-summary">
+                                <span id="accounts-total-sel">0 Accounts</span>, 
+                                <span id="accounts-selected-sel">0 Selected</span>
+                            </div>                                                        
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="button-footer">
+  <button id="cancelButton" class="footer-btn cancel-btn" onclick="closeTrendsDialog()">Cancel</button>
+  <button id="buildWorksheetButton" class="footer-btn build-btn " disabled>Build Worksheet</button>
+</div>
+
+        </div>
+
+            </body>
+</html>

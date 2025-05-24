@@ -164,7 +164,7 @@ function initializeData() {
   sortTable("reminders-table", remindersList, "reminders");
 }
 
-function getLocalStorageData(key) {
+export function getLocalStorageData(key) {
   return JSON.parse(localStorage.getItem(key)) || [];
 }
 
@@ -263,6 +263,7 @@ function getSortKey() {
 
 function populateDropdown(dropdown, storageKey, key1?, key2?, isConcat?) {
   const items = JSON.parse(localStorage.getItem(storageKey) || "[]");
+  console.log(`📦 Populating dropdown for key: ${storageKey}`, items);
 
   items.forEach((item: any) => {
     const option = document.createElement("option");

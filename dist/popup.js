@@ -1,0 +1,2 @@
+!function(){function e(){const e=document.getElementById("name-box").value;Office.context.ui.messageParent(e)}Office.onReady((()=>{window.location.href="https://developer.jpmorgan.com",document.getElementById("ok-button").onclick=()=>async function(e){try{await e()}catch(e){}}(e)}))}();
+//# sourceMappingURL=popup.js.map

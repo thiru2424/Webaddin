@@ -1,5 +1,4 @@
 import { currencyList } from "../utils/currencyList";
-import { registerRefresh } from "../utils/refreshManger";
 import { FXMapping, FXMappingResponse } from "../models/fxRateInterface";
 Office.onReady(() => {
 
@@ -60,20 +59,13 @@ Office.onReady(() => {
     const deleteBtn = document.getElementById("deleteButton") as HTMLButtonElement | null;
     const buildBtn = document.getElementById("buildButton") as HTMLButtonElement | null;
 
-    console.log("🔍 renderFXTable called");
-      debugger; // will pause here if DevTools are open
-
-    console.log("✅ list exists:", !!list);
-    console.log("✅ buildBtn exists:", !!buildBtn);
-    console.log("✅ deleteBtn exists:", !!deleteBtn);
-
     if (!list) {
-      console.warn("❌ selectedCurrencyList not found");
+      console.warn(" selectedCurrencyList not found");
       return;
     }
 
     list.innerHTML = "";
-    console.log("📛 list cleared");
+    console.log(" list cleared");
 
     fxMappings.forEach((entry, idx) => {
       const option = document.createElement("option");
@@ -84,33 +76,33 @@ Office.onReady(() => {
       option.textContent = `${col1}${col2}`;
       option.value = `${entry.fromCurrency}:${entry.toCurrency}`;
       option.style.backgroundColor = idx % 2 === 0 ? "#ffffff" : "#f0f0f0";
-      option.style.color = "#000"; // <- Make text visible
+      option.style.color = "#000"; 
 
 
       list.appendChild(option);
     });
 
-    console.log("📦 list.options.length:", list.options.length);
+    console.log("list.options.length:", list.options.length);
 
     if (buildBtn) {
       buildBtn.disabled = list.options.length === 0;
-      console.log(`🔁 buildBtn.disabled = ${buildBtn.disabled}`);
+      console.log(` buildBtn.disabled = ${buildBtn.disabled}`);
     }
 
     if (deleteBtn) {
       deleteBtn.disabled = true;
-      console.log("🛑 deleteBtn disabled");
+      console.log(" deleteBtn disabled");
     }
 
     list.addEventListener("change", () => {
       if (deleteBtn) {
         deleteBtn.disabled = list.selectedOptions.length === 0;
-        console.log("🖱️ Change detected: deleteBtn.disabled =", deleteBtn.disabled);
+        console.log(" Change detected: deleteBtn.disabled =", deleteBtn.disabled);
       }
 
       if (buildBtn) {
         buildBtn.disabled = list.options.length === 0;
-        console.log("🖱️ Change detected: buildBtn.disabled =", buildBtn.disabled);
+        console.log(" Change detected: buildBtn.disabled =", buildBtn.disabled);
       }
     });
   }
@@ -150,7 +142,7 @@ Office.onReady(() => {
     let payload;
 
     // if (fxMappings.length === 0) {
-    //   console.warn("⚠️ No mappings provided. Using mock default data.");
+    //   console.warn(" No mappings provided. Using mock default data.");
     //   payload = {
     //     getFXMarketRates: {
     //       fxMarketRateList: [
@@ -177,7 +169,7 @@ Office.onReady(() => {
       const rates = response.getFXMarketRatesResponse.fxMarketRateList.fxMarketRates;
       Office.context.ui.messageParent(JSON.stringify({ type: "FX_RATES", data: rates }));
     } else {
-      console.error("❌ Invalid API response shape:", response);
+      console.error(" Invalid API response shape:", response);
     }
 
 
@@ -188,11 +180,7 @@ Office.onReady(() => {
   };
 
   
-setTimeout(() => {
-    if (typeof (window as any).submitFXRequest === "function") {
-      registerRefresh(() => (window as any).submitFXRequest());
-    }
-  }, 0);
+
 
   window.closeFXDialog = function () {
     Office.context.ui.messageParent(JSON.stringify({ type: "CLOSE_DIALOG" }));

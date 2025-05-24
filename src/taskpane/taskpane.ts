@@ -1,12 +1,16 @@
 /*global Office, document, Excel, localStorage, fetch*/
 import translations from "../i18n.json";
-import { refreshData } from "../utils/refreshManger";
+import { fetchCurrencyData } from "../dialogues/trend-service/fetchCurrencyData";
+import { fetchInitData } from "../dialogues/trend-service/fetchInitData";
 Office.onReady((info) => {
   if (info.host === Office.HostType.Excel) {
     loadTranslations();
-// insertPieChart(ledgerData.credits, "Ledger Credits By Transaction Types", 35);
-// insertPieChart(ledgerData.debits, "Ledger Debits By Transaction Types", 60);
-// insertBarChart(projectedCashData, 80);
+    document.addEventListener("DOMContentLoaded", () => {
+      loadData();
+    });
+    // insertPieChart(ledgerData.credits, "Ledger Credits By Transaction Types", 35);
+    // insertPieChart(ledgerData.debits, "Ledger Debits By Transaction Types", 60);
+    // insertBarChart(projectedCashData, 80);
 
     document.getElementById("create-table").onclick = () => tryCatch(createTable);
     //  document.getElementById("sideload-msg").style.display = "none";
@@ -14,21 +18,28 @@ Office.onReady((info) => {
     document.getElementById("open-dialog").onclick = openDialog;
     document.getElementById("exchangeRate").onclick = openFXRate;
     document.getElementById("build-new").onclick = openBuildNew;
+    document.getElementById("create-table1").onclick = () => tryCatch(openTrends);
 
- document.addEventListener("DOMContentLoaded", () => {
-    const refreshBtn = document.getElementById("refresh-data");
-    if (refreshBtn) {
-      refreshBtn.onclick = () => refreshData().catch(console.error);
-    }
-    else{
-      console.warn("button is not accessible");
-    }
-  });
     document.addEventListener("popupLoaded", function () {
       loadTranslations();
     });
   }
 });
+async function loadData() {
+  try {
+    // Fetch account data
+    const accountData = await fetchInitData();
+    localStorage.setItem("accountList", JSON.stringify(accountData));
+
+    // Fetch currency data
+    const currencyData = await fetchCurrencyData();
+    localStorage.setItem("currencyList", JSON.stringify(currencyData));
+    console.log("both success", accountData, currencyData);
+    // Ensure context is synced before opening the dialog
+  } catch (error) {
+    console.error("Error in openTrends:", error);
+  }
+}
 function loadTranslations() {
   const texts = translations["en"]; // Default to English
   document.querySelectorAll("[data-i18n]").forEach((element) => {
@@ -166,7 +177,7 @@ let dialog = null;
 function openDialog() {
   Office.context.ui.displayDialogAsync(
     "https://localhost:3000/popup.html",
-    { height: 45, width: 55 },
+    { height: 45, width: 55 }
 
     // function (result) {
     //   dialog = result.value;
@@ -181,49 +192,64 @@ function openFXRate() {
     { height: 70, width: 40 },
 
     function (result) {
-  const dialog = result.value;
+      const dialog = result.value;
 
-  dialog.addEventHandler(Office.EventType.DialogMessageReceived, (message) => {
-    const jsonObject = JSON.parse(message.message);
+      dialog.addEventHandler(Office.EventType.DialogMessageReceived, (message) => {
+        const jsonObject = JSON.parse(message.message);
 
-    if (jsonObject.type === "FX_RATES" && Array.isArray(jsonObject.data)) {
-      // ✅ Send the full array once
-      addWorksheetAndWriteValues(jsonObject.data);
-    } else {
-      console.warn("Invalid FX data received:", jsonObject.data);
+        if (jsonObject.type === "FX_RATES" && Array.isArray(jsonObject.data)) {
+          addWorksheetAndWriteValues(jsonObject.data);
+        } else {
+          console.warn("Invalid FX data received:", jsonObject.data);
+        }
+
+        dialog.close();
+      });
     }
-
-    dialog.close();
-  });
-}
-
   );
 }
-
 
 function openBuildNew() {
   Office.context.ui.displayDialogAsync(
     "https://localhost:3000/buildNew.html",
     { height: 80, width: 65 },
-function (result) {
-  dialog = result.value;
+    function (result) {
+      dialog = result.value;
 
-  dialog.addEventHandler(Office.EventType.DialogMessageReceived, (message) => {
-    const jsonObject = JSON.parse(message.message);
-    console.log("Currency object being passed:", jsonObject);
+      dialog.addEventHandler(Office.EventType.DialogMessageReceived, (message) => {
+        const jsonObject = JSON.parse(message.message);
+        console.log("Currency object being passed:", jsonObject);
 
-    if (jsonObject.type === "CLOSE_DIALOG") {
-      dialog.close(); // ✅ Close the dialog from taskpane
-      return;
+        if (jsonObject.type === "CLOSE_DIALOG") {
+          dialog.close(); // ✅ Close the dialog from taskpane
+          return;
+        }
+
+        if (jsonObject.type === "FX_RATES") {
+          addWorksheetAndWriteValues(jsonObject.data);
+          dialog.close();
+        }
+      });
     }
-
-    if (jsonObject.type === "FX_RATES") {
-      addWorksheetAndWriteValues(jsonObject.data);
-      dialog.close();
-    }
-  });
+  );
 }
 
+async function openTrends(): Promise<void> {
+  Office.context.ui.displayDialogAsync(
+    "https://localhost:3000/trends.html",
+    { height: 80, width: 65 },
+    function (result) {
+      const dialog = result.value;
+
+      dialog.addEventHandler(Office.EventType.DialogMessageReceived, (message) => {
+        const jsonObject = JSON.parse(message.message);
+
+        if (jsonObject.type === "CLOSE_DIALOG") {
+          dialog.close(); // ✅ Close the dialog from taskpane
+          return;
+        }
+      });
+    }
   );
 }
 
@@ -238,16 +264,16 @@ export async function addWorksheetAndWriteValues(currencyList) {
 
     await Excel.run(async (context) => {
       const sheet = context.workbook.worksheets.getActiveWorksheet();
-  sheet.activate();
+      sheet.activate();
 
-  // 🔄 Clear the whole sheet safely
-  const usedRange = sheet.getUsedRange();
-  usedRange.load("address");
-  await context.sync();
-  usedRange.clear();      
+      // 🔄 Clear the whole sheet safely
+      const usedRange = sheet.getUsedRange();
+      usedRange.load("address");
+      await context.sync();
+      usedRange.clear();
 
       const output = [["From Currency", "Target Currency", "Rate"]];
-      data.forEach(item => {
+      data.forEach((item) => {
         output.push([item.fromCurrency, item.toCurrency, item.fxRate]);
       });
 
@@ -257,13 +283,9 @@ export async function addWorksheetAndWriteValues(currencyList) {
       headerRange.format.font.bold = true;
       headerRange.format.fill.color = "#D9D9D9"; // light grey
 
-
       await context.sync();
     });
   } catch (error) {
     console.error("Excel write failed:", error);
   }
 }
-
-
-

@@ -18,6 +18,7 @@ module.exports = async (env, options) => {
       popup: "./src/dialogues/popup.js",
       exRate: "./src/dialogues/exRate.ts",
       buildNew: "./src/dialogues/buildNew.ts",
+      trends: "./src/dialogues/trends.ts",
     },
     output: {
       clean: true,
@@ -82,6 +83,11 @@ module.exports = async (env, options) => {
         filename: "commands.html",
         template: "./src/commands/commands.html",
         chunks: ["polyfill", "commands"],
+      }),
+      new HtmlWebpackPlugin({
+        filename: "trends.html",
+        template: "./src/dialogues/trends.html",
+        chunks: ["polyfill", "trends"],
       }),
       new CopyWebpackPlugin({
         patterns: [

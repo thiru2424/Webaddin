@@ -8,13 +8,5 @@ export const currencyList: Record<string, string> = {
   "CAD": "Canadian Dollar",
   "CHF": "Swiss Franc",
   "CNY": "Chinese Yuan",
-  "ZAR": "South African Rand",
-  "xxx":"test",
-    "yyy":"test",
-      "zzz":"test",
-        "xxxx":"test",
-        
-
-
-
+  "ZAR": "South African Rand"
 };

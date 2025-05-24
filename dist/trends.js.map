@@ -1,0 +1,1 @@
+{"version":3,"file":"trends.js","mappings":"AAAAA,OAAOC,SAAQ,WAAO","sources":["webpack://office-addin-taskpane/./src/dialogues/trends.ts"],"sourcesContent":["Office.onReady(() => {});\r\n"],"names":["Office","onReady"],"sourceRoot":""}
