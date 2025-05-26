@@ -35,6 +35,8 @@ export function initializeData() {
   renderTable(availableAccountsData, getSortKey(), "available-accounts");
   updateAccountCount();
   sortTable("available-accounts", availableAccountsData);
+  sortTable("selected-accounts", selectedAccountsData);
+
 }
 
 export function updateBuildButtonState() {
@@ -72,9 +74,13 @@ export function setupEventListeners() {
 
 export function handleViewChange() {
   const viewBy = getSortKey();
-  const accountsList = getLocalStorageData("accountList");
-  renderTable(accountsList, viewBy);
+
+  // ✅ Use current state instead of reloading
+  renderTable(availableAccountsData, viewBy, "available-accounts");
   renderTable(selectedAccountsData, viewBy, "selected-accounts");
+
+   sortTable("available-accounts", availableAccountsData);
+  sortTable("selected-accounts", selectedAccountsData);
 }
 
 export function moveSelected(sourceTable: HTMLElement, targetTable: HTMLElement, isAccount: boolean) {
