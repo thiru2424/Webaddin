@@ -10,6 +10,8 @@ export function setupTableListeners(availableId: string, selectedId: string) {
   selected.addEventListener("click", (e) => toggleRowSelection(e));
 
   document.getElementById("add-btn")!.addEventListener("click", () => {
+        console.log(available,selectedTable,"sadasds");
+
     moveSelected(available, selectedTable, true); // pass selectedTable
     updateBuildButtonState();
   });

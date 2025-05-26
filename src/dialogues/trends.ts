@@ -78,112 +78,83 @@ export function handleViewChange() {
 }
 
 export function moveSelected(sourceTable: HTMLElement, targetTable: HTMLElement, isAccount: boolean) {
-  console.log("➡️ moveSelected called, source:", sourceTable.id, "target:", targetTable.id);
   const movedAccounts: any[] = [];
+  const viewBy = getSortKey();
 
-  sourceTable.querySelectorAll(".selected").forEach((row, idx) => {
+  const parentTableId = sourceTable.closest("table")?.id;
+  const sourceData = parentTableId === "available-accounts" ? availableAccountsData : selectedAccountsData;
+
+  sourceTable.querySelectorAll(".selected").forEach((row) => {
     const cells = row.querySelectorAll("td");
-    const account = {
-      accountNumber: cells[0].textContent,
-      currency: cells[1].textContent,
-    };
-    console.log(`✅ Moving account ${idx + 1}:`, account);
-    movedAccounts.push(account);
-    row.remove();
+    const key = cells[0].textContent?.trim();
+    const currency = cells[1].textContent?.trim();
+
+    const index = sourceData.findIndex((acc) =>
+      viewBy === "accountNumber"
+        ? acc.accountNumber?.toString().trim() === key
+        : acc.accountName?.toString().trim().toLowerCase() === key?.toLowerCase() &&
+          acc.currency?.toUpperCase().trim() === currency?.toUpperCase()
+    );
+
+    if (index !== -1) {
+      const fullAccount = sourceData[index];
+      movedAccounts.push(fullAccount);
+      sourceData.splice(index, 1); // Remove only the exact matched item
+    }
+
+    row.remove(); // remove row from UI table
   });
 
-  if (isAccount && targetTable.id === "selected-accounts") {
-    // Remove from available
-    console.log("Before Filter", availableAccountsData);
-    availableAccountsData = availableAccountsData.filter(
-      (acc) =>
-        !movedAccounts.some(
-          (m) =>
-            m.accountNumber?.toString().trim() === acc.accountNumber?.toString().trim() &&
-            m.currency?.toUpperCase().trim() === acc.currency?.toUpperCase().trim()
-        )
-    );
-
-    console.log("after Filter", availableAccountsData);
-
-    // Add to selected
+  if (parentTableId === "available-accounts") {
     selectedAccountsData.push(...movedAccounts);
-
-    renderTable(selectedAccountsData, getSortKey(), "selected-accounts");
-    renderTable(availableAccountsData, getSortKey(), "available-accounts");
-    sortTable("selected-accounts", selectedAccountsData);
-    sortTable("available-accounts", availableAccountsData);
-  } else if (isAccount && targetTable.id === "available-accounts") {
-    // Remove from selected
-    selectedAccountsData = selectedAccountsData.filter(
-      (acc) => !movedAccounts.some((m) => m.accountNumber === acc.accountNumber && m.currency === acc.currency)
-    );
-    // Add to available
+  } else {
     availableAccountsData.push(...movedAccounts);
-
-    renderTable(selectedAccountsData, getSortKey(), "selected-accounts");
-    renderTable(availableAccountsData, getSortKey(), "available-accounts");
-    sortTable("selected-accounts", selectedAccountsData);
-    sortTable("available-accounts", availableAccountsData);
   }
 
+  renderTable(availableAccountsData, getSortKey(), "available-accounts");
+  renderTable(selectedAccountsData, getSortKey(), "selected-accounts");
   updateAccountCount(isAccount);
   updateBuildButtonState();
 }
 
-export function moveAll(from: HTMLElement, toTable: HTMLElement, isAccount: boolean) {
-  console.log("➡️ moveAll called, from:", from.id, "to table id:", toTable.id);
-
+export function moveAll(sourceTable: HTMLElement, targetTable: HTMLElement, isAccount: boolean) {
   const movedAccounts: any[] = [];
-  Array.from(from.children).forEach((row, idx) => {
+  const viewBy = getSortKey();
+
+  const parentTableId = sourceTable.closest("table")?.id;
+  const sourceData = parentTableId === "available-accounts" ? availableAccountsData : selectedAccountsData;
+
+  const rows = Array.from(sourceTable.children);
+
+  rows.forEach((row) => {
     const cells = row.querySelectorAll("td");
-    const account = {
-      accountNumber: cells[0].textContent,
-      currency: cells[1].textContent,
-    };
-    console.log(`✅ Moving account ${idx + 1}:`, account);
-    movedAccounts.push(account);
-    row.remove();
+    const key = cells[0].textContent?.trim();
+    const currency = cells[1].textContent?.trim();
+
+    const index = sourceData.findIndex((acc) =>
+      viewBy === "accountNumber"
+        ? acc.accountNumber?.toString().trim() === key
+        : acc.accountName?.toString().trim().toLowerCase() === key?.toLowerCase() &&
+          acc.currency?.toUpperCase().trim() === currency?.toUpperCase()
+    );
+
+    if (index !== -1) {
+      const fullAccount = sourceData[index];
+      movedAccounts.push(fullAccount);
+      sourceData.splice(index, 1); // Remove the exact one to prevent duplicates
+    }
+
+    row.remove(); // Remove row from the table
   });
 
-  if (isAccount && toTable.id === "selected-accounts") {
-    // ✅ Remove from availableAccountsData
-    availableAccountsData = availableAccountsData.filter(
-      (acc) =>
-        !movedAccounts.some(
-          (m) =>
-            m.accountNumber?.toString().trim() === acc.accountNumber?.toString().trim() &&
-            m.currency?.toUpperCase().trim() === acc.currency?.toUpperCase().trim()
-        )
-    );
-
-    // ✅ Add to selectedAccountsData
+  if (parentTableId === "available-accounts") {
     selectedAccountsData.push(...movedAccounts);
-
-    renderTable(selectedAccountsData, getSortKey(), "selected-accounts");
-    renderTable(availableAccountsData, getSortKey(), "available-accounts");
-    sortTable("selected-accounts", selectedAccountsData);
-    sortTable("available-accounts", availableAccountsData);
-  } else if (isAccount && toTable.id === "available-accounts") {
-    // ✅ Remove from selectedAccountsData
-    selectedAccountsData = selectedAccountsData.filter(
-      (acc) =>
-        !movedAccounts.some(
-          (m) =>
-            m.accountNumber?.toString().trim() === acc.accountNumber?.toString().trim() &&
-            m.currency?.toUpperCase().trim() === acc.currency?.toUpperCase().trim()
-        )
-    );
-
-    // ✅ Add to availableAccountsData
+  } else {
     availableAccountsData.push(...movedAccounts);
-
-    renderTable(selectedAccountsData, getSortKey(), "selected-accounts");
-    renderTable(availableAccountsData, getSortKey(), "available-accounts");
-    sortTable("selected-accounts", selectedAccountsData);
-    sortTable("available-accounts", availableAccountsData);
   }
 
+  renderTable(availableAccountsData, getSortKey(), "available-accounts");
+  renderTable(selectedAccountsData, getSortKey(), "selected-accounts");
   updateAccountCount(isAccount);
   updateBuildButtonState();
 }
