@@ -13,6 +13,7 @@ export function setupDateUI(validateDates: () => boolean) {
     const selected = dateOption.value;
     startDate.value = "";
     endDate.value = "";
+    
     startDate.max = today;
     endDate.max = today;
 
