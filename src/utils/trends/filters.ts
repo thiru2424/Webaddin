@@ -1,24 +1,33 @@
 import { renderTable } from "./renderTable";
 import { getSortKey } from "./sort";
-import { getLocalStorageData } from "../../dialogues/trends";
 import { availableAccountsData } from "../../dialogues/trends";
+import { updateAccountCount } from "../../dialogues/trend-service/setupTableListeners";
 export function applyFilters() {
   const filterCurrency = (document.getElementById("filterCurrency") as HTMLSelectElement).value;
   const filterAccount = (document.getElementById("filterAccount") as HTMLInputElement).value.toLowerCase();
   const filterAccName = (document.getElementById("filterAccountName") as HTMLInputElement).value.toLowerCase();
 
+  const viewBy = getSortKey();
+
   const filtered = availableAccountsData.filter(
     (account) =>
       (!filterCurrency || filterCurrency === "All" || account.currency === filterCurrency) &&
-      (!filterAccount || account.accountNumber.toString().includes(filterAccount)) &&
+      (!filterAccount || account.accountNumber.toString().toLowerCase().includes(filterAccount)) &&
       (!filterAccName || account.accountName.toLowerCase().includes(filterAccName))
   );
 
-  renderTable(filtered, getSortKey(), "available-accounts");
+  renderTable(filtered, viewBy, "available-accounts");
+    updateAccountCount();
+  
 }
+
 export function removeFilters() {
   (document.getElementById("filterCurrency") as HTMLSelectElement).value = "All";
   (document.getElementById("filterAccount") as HTMLInputElement).value = "";
   (document.getElementById("filterAccountName") as HTMLInputElement).value = "";
-  renderTable(getLocalStorageData("accountList"), getSortKey());
+
+  // 🛑 Don't reload from localStorage
+  renderTable(availableAccountsData, getSortKey(), "available-accounts");
+      updateAccountCount();
+
 }

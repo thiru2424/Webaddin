@@ -36,7 +36,6 @@ export function initializeData() {
   updateAccountCount();
   sortTable("available-accounts", availableAccountsData);
   sortTable("selected-accounts", selectedAccountsData);
-
 }
 
 export function updateBuildButtonState() {
@@ -75,11 +74,24 @@ export function setupEventListeners() {
 export function handleViewChange() {
   const viewBy = getSortKey();
 
-  // ✅ Use current state instead of reloading
-  renderTable(availableAccountsData, viewBy, "available-accounts");
-  renderTable(selectedAccountsData, viewBy, "selected-accounts");
+  const filterCurrency = (document.getElementById("filterCurrency") as HTMLSelectElement).value;
+  const filterAccount = (document.getElementById("filterAccount") as HTMLInputElement).value.toLowerCase();
+  const filterAccName = (document.getElementById("filterAccountName") as HTMLInputElement).value.toLowerCase();
 
-   sortTable("available-accounts", availableAccountsData);
+  const filterIsActive = filterCurrency !== "All" || filterAccount !== "" || filterAccName !== "";
+
+  const filteredAvailable = filterIsActive
+    ? availableAccountsData.filter(
+        (account) =>
+          (!filterCurrency || filterCurrency === "All" || account.currency === filterCurrency) &&
+          (!filterAccount || account.accountNumber.toString().toLowerCase().includes(filterAccount)) &&
+          (!filterAccName || account.accountName.toLowerCase().includes(filterAccName))
+      )
+    : availableAccountsData;
+
+  renderTable(filteredAvailable, viewBy, "available-accounts");
+  renderTable(selectedAccountsData, viewBy, "selected-accounts");
+  sortTable("available-accounts", filteredAvailable);
   sortTable("selected-accounts", selectedAccountsData);
 }
 
@@ -119,7 +131,7 @@ export function moveSelected(sourceTable: HTMLElement, targetTable: HTMLElement,
 
   renderTable(availableAccountsData, getSortKey(), "available-accounts");
   renderTable(selectedAccountsData, getSortKey(), "selected-accounts");
-  updateAccountCount(isAccount);
+  updateAccountCount();
   updateBuildButtonState();
 }
 
@@ -161,7 +173,7 @@ export function moveAll(sourceTable: HTMLElement, targetTable: HTMLElement, isAc
 
   renderTable(availableAccountsData, getSortKey(), "available-accounts");
   renderTable(selectedAccountsData, getSortKey(), "selected-accounts");
-  updateAccountCount(isAccount);
+  updateAccountCount();
   updateBuildButtonState();
 }
 
