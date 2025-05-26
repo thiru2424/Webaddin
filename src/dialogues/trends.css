@@ -132,6 +132,11 @@
     padding: 5px;
 }
 
+.icon-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .filter-icon {
     color: blue;
 }

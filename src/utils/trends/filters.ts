@@ -18,7 +18,9 @@ export function applyFilters() {
 
   renderTable(filtered, viewBy, "available-accounts");
     updateAccountCount();
-  
+   const clearBtn = document.getElementById("removeFilter") as HTMLButtonElement;
+  const filterActive = filterCurrency !== "All" || filterAccount !== "" || filterAccName !== "";
+  clearBtn.disabled = !filterActive;
 }
 
 export function removeFilters() {
@@ -29,5 +31,7 @@ export function removeFilters() {
   // 🛑 Don't reload from localStorage
   renderTable(availableAccountsData, getSortKey(), "available-accounts");
       updateAccountCount();
+const clearBtn = document.getElementById("removeFilter") as HTMLButtonElement;
+  clearBtn.disabled = true;
 
 }
