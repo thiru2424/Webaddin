@@ -128,8 +128,8 @@ export function moveSelected(sourceTable: HTMLElement, targetTable: HTMLElement,
   } else {
     availableAccountsData.push(...movedAccounts);
   }
-
-  renderTable(availableAccountsData, getSortKey(), "available-accounts");
+  const filtered = isFilterActive() ? filterAvailable(availableAccountsData) : availableAccountsData;
+  renderTable(filtered, viewBy, "available-accounts");
   renderTable(selectedAccountsData, getSortKey(), "selected-accounts");
   updateAccountCount();
   updateBuildButtonState();
@@ -171,10 +171,33 @@ export function moveAll(sourceTable: HTMLElement, targetTable: HTMLElement, isAc
     availableAccountsData.push(...movedAccounts);
   }
 
-  renderTable(availableAccountsData, getSortKey(), "available-accounts");
+  const filtered = isFilterActive() ? filterAvailable(availableAccountsData) : availableAccountsData;
+  renderTable(filtered, viewBy, "available-accounts");
   renderTable(selectedAccountsData, getSortKey(), "selected-accounts");
   updateAccountCount();
   updateBuildButtonState();
+}
+
+export function getActiveFilters() {
+  const currency = (document.getElementById("filterCurrency") as HTMLSelectElement).value;
+  const account = (document.getElementById("filterAccount") as HTMLInputElement).value.toLowerCase();
+  const accName = (document.getElementById("filterAccountName") as HTMLInputElement).value.toLowerCase();
+  return { currency, account, accName };
+}
+
+export function isFilterActive() {
+  const { currency, account, accName } = getActiveFilters();
+  return currency !== "All" || account !== "" || accName !== "";
+}
+
+export function filterAvailable(data: any[]) {
+  const { currency, account, accName } = getActiveFilters();
+  return data.filter(
+    (accountItem) =>
+      (!currency || currency === "All" || accountItem.currency === currency) &&
+      (!account || accountItem.accountNumber.toString().toLowerCase().includes(account)) &&
+      (!accName || accountItem.accountName.toLowerCase().includes(accName))
+  );
 }
 
 export { availableAccountsData, selectedAccountsData };
