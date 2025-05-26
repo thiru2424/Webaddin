@@ -5,9 +5,9 @@ import { fetchInitData } from "../dialogues/trend-service/fetchInitData";
 Office.onReady((info) => {
   if (info.host === Office.HostType.Excel) {
     loadTranslations();
-    document.addEventListener("DOMContentLoaded", () => {
-      loadData();
-    });
+
+    loadData();
+
     // insertPieChart(ledgerData.credits, "Ledger Credits By Transaction Types", 35);
     // insertPieChart(ledgerData.debits, "Ledger Debits By Transaction Types", 60);
     // insertBarChart(projectedCashData, 80);
@@ -28,7 +28,11 @@ Office.onReady((info) => {
 async function loadData() {
   try {
     // Fetch account data
+    console.log("before intdata success");
+
     const accountData = await fetchInitData();
+    console.log("after intdata");
+
     localStorage.setItem("accountList", JSON.stringify(accountData));
 
     // Fetch currency data
