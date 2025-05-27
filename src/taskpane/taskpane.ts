@@ -221,7 +221,7 @@ function openBuildNew() {
         const jsonObject = JSON.parse(message.message);
 
         if (jsonObject.type === "CLOSE_DIALOG") {
-          dialog.close(); // ✅ Close the dialog from taskpane
+          dialog.close(); //  Close the dialog from taskpane
           return;
         }
 
@@ -245,7 +245,7 @@ async function openTrends(): Promise<void> {
         const jsonObject = JSON.parse(message.message);
 
         if (jsonObject.type === "CLOSE_DIALOG") {
-          dialog.close(); // ✅ Close the dialog from taskpane
+          dialog.close(); //  Close the dialog from taskpane
           return;
         }
       });
