@@ -28,17 +28,14 @@ Office.onReady((info) => {
 async function loadData() {
   try {
     // Fetch account data
-    console.log("before intdata success");
 
     const accountData = await fetchInitData();
-    console.log("after intdata");
 
     localStorage.setItem("accountList", JSON.stringify(accountData));
 
     // Fetch currency data
     const currencyData = await fetchCurrencyData();
     localStorage.setItem("currencyList", JSON.stringify(currencyData));
-    console.log("both success", accountData, currencyData);
     // Ensure context is synced before opening the dialog
   } catch (error) {
     console.error("Error in openTrends:", error);
@@ -222,7 +219,6 @@ function openBuildNew() {
 
       dialog.addEventHandler(Office.EventType.DialogMessageReceived, (message) => {
         const jsonObject = JSON.parse(message.message);
-        console.log("Currency object being passed:", jsonObject);
 
         if (jsonObject.type === "CLOSE_DIALOG") {
           dialog.close(); // ✅ Close the dialog from taskpane

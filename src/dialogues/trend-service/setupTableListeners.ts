@@ -1,17 +1,16 @@
-import { updateBuildButtonState } from "../trends";
-import { moveSelected, moveAll } from "../trends";
+import { updateBuildButtonState } from "../../utils/trends/updateBuildButtonState";
+import { moveSelected, moveAll } from "../../utils/trends/moveAccounts";
 export function setupTableListeners(availableId: string, selectedId: string) {
   const availableTable = document.getElementById(availableId)!;
   const selectedTable = document.getElementById(selectedId)!;
   const available = availableTable.querySelector("tbody")!;
   const selected = selectedTable.querySelector("tbody")!;
-
+  console.log("setting up toggleRowSelection");
   available.addEventListener("click", (e) => toggleRowSelection(e));
+  console.log("setting up toggleRowSelection");
   selected.addEventListener("click", (e) => toggleRowSelection(e));
 
   document.getElementById("add-btn")!.addEventListener("click", () => {
-        console.log(available,selectedTable,"sadasds");
-
     moveSelected(available, selectedTable, true); // pass selectedTable
     updateBuildButtonState();
   });
@@ -34,13 +33,22 @@ export function setupTableListeners(availableId: string, selectedId: string) {
 
 export function toggleRowSelection(event: MouseEvent) {
   const row = (event.target as HTMLElement).closest("tr");
-  if (!row) return;
+  if (!row) {
+    console.log("⚠️ No <tr> found for the clicked element.");
+    return;
+  }
 
   if (event.ctrlKey || event.metaKey) {
+    const wasSelected = row.classList.contains("selected");
     row.classList.toggle("selected");
   } else {
-    const siblings = row.parentElement!.querySelectorAll(".selected");
-    siblings.forEach((sib) => sib.classList.remove("selected"));
+    const tbody = row.closest("tbody");
+    const previouslySelected = tbody?.querySelectorAll(".selected") || [];
+
+    previouslySelected.forEach((r) => {
+      r.classList.remove("selected");
+    });
+
     row.classList.add("selected");
   }
 

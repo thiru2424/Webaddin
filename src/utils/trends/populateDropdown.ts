@@ -2,7 +2,6 @@ import { getLocalStorageData } from "../../dialogues/trends";
 export function populateDropdown(dropdown: HTMLElement | null, storageKey: string) {
   if (!dropdown) return;
   const items = getLocalStorageData(storageKey);
-  console.log(`📦 Populating dropdown for key: ${storageKey}`, items);
 
   items.forEach((item: any) => {
     const option = document.createElement("option");

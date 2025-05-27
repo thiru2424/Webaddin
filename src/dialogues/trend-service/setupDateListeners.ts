@@ -1,4 +1,5 @@
-export function setupDateUI(validateDates: () => boolean) {
+import { validateDates } from "../../utils/trends/validateDates";
+export function setupDateUI() {
   const dateOption = document.getElementById("dateOption") as HTMLSelectElement;
   const startDate = document.getElementById("startDate") as HTMLInputElement;
   const endDate = document.getElementById("endDate") as HTMLInputElement;
