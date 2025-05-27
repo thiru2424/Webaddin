@@ -29,14 +29,28 @@ export function closeTrendsDialog(): void {
 export function initializeData() {
   const accountData = getLocalStorageData("accountList"); // One-time fetch
   availableAccountsData = [...accountData]; // Clone for memory use
-
+  console.log(accountData);
   const currencyData = getLocalStorageData("currencyList"); // One-time fetch
-  populateDropdown(document.getElementById("filterCurrency"), "currencyList");
+  const orderedCurrencies = getOrderedCurrenciesFromAccounts(accountData);
+  populateDropdown(document.getElementById("filterCurrency"), orderedCurrencies);
 
   renderTable(availableAccountsData, getSortKey(), "available-accounts");
   updateAccountCount();
   sortTable("available-accounts", availableAccountsData);
   sortTable("selected-accounts", selectedAccountsData);
+}
+function getOrderedCurrenciesFromAccounts(accountData: any[]): string[] {
+  const priorityOrder = ["USD", "EUR", "GBP", "CAD", "JPY"];
+
+  // Step 1: Get all unique currencies
+  const uniqueCurrencies = Array.from(new Set(accountData.map((acc) => acc.currency)));
+
+  // Step 2: Separate those in priorityOrder and the rest
+  const prioritized = priorityOrder.filter((c) => uniqueCurrencies.includes(c));
+  const others = uniqueCurrencies.filter((c) => !priorityOrder.includes(c)).sort(); // Optional: alphabetically sort other currencies
+
+  // Step 3: Combine both
+  return [...prioritized, ...others];
 }
 
 export function setupEventListeners() {
