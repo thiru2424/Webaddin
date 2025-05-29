@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Session Warning</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="alert-strip">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="white">
+                <path d="M12 1a11 11 0 1 0 11 11A11.013 11.013 0 0 0 12 1zm0 20a9 9 0 1 1 9-9.01 9.01 0 0 1-9 9z" />
+                <path d="M12.5 7h-1v6.15l.5.86 1-4.75-2.79V7z" />
+            </svg>
+            <h2>You Have Been Inactive</h2>
+        </div>
+
+        <div class="message">
+            For security reasons, you will be logged out of the application. Click the "Continue Session" button to
+            resume.
+            <p class="message" id="countdown-timer">10</p>
+        </div>
+
+        <div class="footer">
+            <button class="btn-continue" id="continue-btn">Continue Session</button>
+        </div>
+    </div>
+
+    <script>
+        Office.onReady(() => {
+            let counter = 10;
+            const countdownEl = document.getElementById("countdown-timer");
+            const interval = setInterval(() => {
+                counter--;
+                countdownEl.textContent = counter;
+                if (counter <= 0) {
+                    clearInterval(interval);
+                }
+            }, 1000);
+
+            document.getElementById("continue-btn")?.addEventListener("click", () => {
+                Office.context.ui.messageParent("continueSession");
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,7 +1,7 @@
 import { renderTable } from "./renderTable";
 import { getSortKey } from "./sortAccounts";
-import { availableAccountsData } from "../../dialogues/trends";
-import { updateAccountCount } from "../../dialogues/trend-service/setupTableListeners";
+import { availableAccountsData } from "../../taskpane/popup/trends";
+import { updateAccountCount } from "./setupTableListeners";
 export function applyFilters() {
   const filterCurrency = (document.getElementById("filterCurrency") as HTMLSelectElement).value;
   const filterAccount = (document.getElementById("filterAccount") as HTMLInputElement).value.toLowerCase();

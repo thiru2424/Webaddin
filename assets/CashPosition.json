@@ -1,0 +1,146 @@
+{
+  "fontName": "Aptos Narrow",
+  "reportValues": [
+    {
+      "cell": "A2",
+      "value": "Branch",
+      "textBackground": "#000000",
+      "cellBackground": "#F2F2F2",
+      "font": 9,
+      "bold": false,
+      "align": "Left",
+      "valueAlign": "Center"
+    },
+    {
+      "cell": "A3",
+      "value": "Account\\nAccount Name\\nCurrency",
+      "textBackground": "#000000",
+      "cellBackground": "#F2F2F2",
+      "font": 9,
+      "bold": false,
+      "align": "Left",
+      "valueAlign": "Right"
+    }
+  ],
+  "reportDetails": [
+    {
+      "cell": "A4",
+      "fieldName": "Opening Ledger",
+      "isFormula": false,
+      "filter": [{ "key": "detailsType", "value": "3" }]
+    },
+    {
+      "cell": "A5",
+      "fieldName": "Opening Available",
+      "isFormula": false,
+      "filter": [{ "key": "detailsType", "value": "3" }]
+    },
+    {
+      "cell": "A7",
+      "fieldName": "Current Ledger",
+      "isFormula": false,
+      "filter": [{ "key": "detailsType", "value": "3" }]
+    },
+    {
+      "cell": "A8",
+      "fieldName": "Current Available",
+      "isFormula": false,
+      "filter": [{ "key": "detailsType", "value": "3" }]
+    },
+    {
+      "cell": "A10",
+      "fieldName": "Enter Anticipated Credits",
+      "isFormula": false,
+      "filter": [{ "key": "userField", "value": "-" }]
+    },
+    {
+      "cell": "A11",
+      "fieldName": "Enter Anticipated Debits",
+      "isFormula": false,
+      "filter": [{ "key": "userField", "value": "-" }]
+    },
+    {
+      "cell": "A14",
+      "fieldName": "Projected Balance",
+      "isFormula": true,
+      "filter": [{ "key": "formula", "value": "=SUM(IF({colNum}B4~\\_,0,{colNum}B4)+IF({colNum}J10~\\_,0,{colNum}J10)-IF({colNum}J11~\\_,0,{colNum}J11))" }]
+    },
+    {
+      "cell": "A15",
+      "fieldName": "Enter Target Balance",
+      "isFormula": false,
+      "filter": [{ "key": "userField", "value": "-" }]
+    },
+    {
+      "cell": "A16",
+      "fieldName": "Excess/Deficit",
+      "isFormula": true,
+      "filter": [{ "key": "formula", "value": "=SUM(IF({colNum}J14~\\_,0,{colNum}J14)-IF({colNum}J15~\\_,0,{colNum}J15))" }]
+    }
+  ],
+  "reportHeaders": [
+    {
+      "cell": "A1",
+      "value": "J.P. Morgan Access® Insight℠",
+      "textBackground": "#FFFFFF",
+      "cellBackground": "#254061",
+      "font": 12,
+      "bold": true,
+      "align": "Left"
+    },
+    {
+      "cell": "B1",
+      "value": "Cash Position Report",
+      "textBackground": "#FFFFFF",
+      "cellBackground": "#254061",
+      "font": 12,
+      "bold": true,
+      "align": "Left"
+    },
+    {
+      "cell": "A13",
+      "value": "SUMMARY",
+      "textBackground": "#FFFFFF",
+      "cellBackground": "#254061",
+      "font": 11,
+      "bold": false,
+      "align": "Left"
+    }
+  ],
+  "ledgerDetails": [
+    {
+      "detailsType": "1",
+      "fieldName": "Ledger Credits",
+      "totalHeading": "Total Credits",
+      "textBackground": "#000000",
+      "cellBackground": "#D8D8D8",
+      "font": 11,
+      "bold": false,
+      "align": "Left",
+      "filter": [{ "key": "detailsType", "value": "1" }]
+    },
+    {
+      "detailsType": "2",
+      "fieldName": "Ledger Debits",
+      "totalHeading": "Total Debits",
+      "textBackground": "#000000",
+      "cellBackground": "#D8D8D8",
+      "font": 11,
+      "bold": false,
+      "align": "Left",
+      "filter": [{ "key": "detailsType", "value": "2" }]
+    }
+  ],
+  "floatDetails": [
+    {
+      "detailsType": "3",
+      "fieldName": "FLOAT BALANCES",
+      "textBackground": "#000000",
+      "cellBackground": "#D8D8D8",
+      "font": 11,
+      "bold": false,
+      "align": "Left",
+      "filter": [{ "key": "detailsType", "value": "3" }]
+    }
+  ]
+}

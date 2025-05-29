@@ -1,5 +1,5 @@
-import { updateBuildButtonState } from "../../utils/trends/updateBuildButtonState";
-import { moveSelected, moveAll } from "../../utils/trends/moveAccounts";
+import { updateBuildButtonState } from "./updateBuildButtonState";
+import { moveSelected, moveAll } from "./moveAccounts";
 export function setupTableListeners(availableId: string, selectedId: string) {
   const availableTable = document.getElementById(availableId)!;
   const selectedTable = document.getElementById(selectedId)!;

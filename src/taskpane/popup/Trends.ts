@@ -1,14 +1,14 @@
 /* global Office, document, window, localStorage */
-import { populateDropdown } from "../utils/trends/populateDropdown";
-import { renderTable } from "../utils/trends/renderTable";
-import { setupTableListeners } from "./trend-service/setupTableListeners";
-import { getSortKey } from "../utils/trends/sortAccounts";
-import { applyFilters, removeFilters } from "../utils/trends/filterAccounts";
-import { updateAccountCount } from "./trend-service/setupTableListeners";
-import { sortTable } from "../utils/trends/sortAccounts";
-import { handleViewChange } from "../utils/trends/handleViewChange";
-import { updateBuildButtonState } from "../utils/trends/updateBuildButtonState";
-import { setupDateUI } from "./trend-service/setupDateListeners";
+import { populateDropdown } from "../../components/trends/populateDropdown";
+import { renderTable } from "../../components/trends/renderTable";
+import { setupTableListeners } from "../../components/trends/setupTableListeners";
+import { getSortKey } from "../../components/trends/sortAccounts";
+import { applyFilters, removeFilters } from "../../components/trends/filterAccounts";
+import { updateAccountCount } from "../../components/trends//setupTableListeners";
+import { sortTable } from "../../components/trends/sortAccounts";
+import { handleViewChange } from "../../components/trends//handleViewChange";
+import { updateBuildButtonState } from "../../components/trends/updateBuildButtonState";
+import { setupDateUI } from "../../components/trends/setupDateListeners";
 Office.onReady(() => {
   setupEventListeners();
   initializeData();

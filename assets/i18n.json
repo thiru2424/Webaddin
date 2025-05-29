@@ -1,0 +1,30 @@
+{
+  "en": {
+    "title": "JPM Access Add-in",
+    "login": "Login",
+    "cashPosition": "Cash position",
+    "buildNew": "Build new",
+    "reminders": "Reminders",
+    "manage": "Manage",
+    "fxRates": "FX Rates",
+    "validate": "Validate",
+    "refresh": "Refresh",
+    "trend": "Trend",
+    "payment": "Payments",
+    "fxtitle": "Exchange Rate Tool",
+    "currencies": "Currencies",
+    "fxInfo": "Select a Target Currency and one or more Available Currencies to build an Exchange Rate table.",
+    "targetCurrency": "Target Currency",
+    "selectOption": "Select",
+    "currencyConvert": "Currencies to Convert",
+    "availableCurrencies": "Available Currencies",
+    "addSelected": "Add",
+    "currencyConverted": "Currencies to be converted",
+    "fxNote": "Note: Rates are estimates and should be used for informational purposes only. These may not reflect rates that are used when creating payments.",
+    "fromCurrency": "From Currency",
+    "toCurrency": "To Currency",
+    "delete": "Delete",
+    "buildFxTable": "Build Exchange Table",
+    "close": "Close"
+  }
+}

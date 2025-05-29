@@ -1,101 +1,91 @@
-/*global Office, document, Excel, localStorage, fetch*/
-import translations from "../i18n.json";
-import { fetchCurrencyData } from "../dialogues/trend-service/fetchCurrencyData";
-import { fetchInitData } from "../dialogues/trend-service/fetchInitData";
-Office.onReady((info) => {
+/* global Office, document, Excel, fetch */
+
+import { loadLanguage, loadConfig, API_URLS } from "./Config";
+import { ApiService } from "../service/ApiService";
+import { CanCreatePayment, Currency, PaymentTemplate, UserAuthorized, accountData } from "./Interfaces";
+import { SessionService } from "../service/SessionService";
+import { CashPosition } from "./CashPosition";
+import { ExchangeRate } from "./ExchangeRate";
+import { Logger } from "../util/Logger";
+import { initializeIdleTimer } from "../util/IdleTimer";
+
+const sessionService = new SessionService();
+const api = new ApiService();
+let lastExtendedAt = 0;
+const EXTEND_SESSION_TIME = 5 * 60 * 1000;
+const cashPosition = new CashPosition();
+const exchangeRate = new ExchangeRate();
+
+Office.onReady(async (info) => {
   if (info.host === Office.HostType.Excel) {
-    loadTranslations();
+    try {
+      await loadConfig();
+      await loadLanguage();
+      initialize();
+      initializeIdleTimer();
+      extendSession();
 
-    loadData();
+      document.getElementById("create-table")!.onclick = () => tryCatch(createTable);
+    } catch (error) {
+      Logger.error("Failed to load config");
+      Logger.showErrorDialog("Failed to load config");
+    }
 
-    // insertPieChart(ledgerData.credits, "Ledger Credits By Transaction Types", 35);
-    // insertPieChart(ledgerData.debits, "Ledger Debits By Transaction Types", 60);
-    // insertBarChart(projectedCashData, 80);
-
-    document.getElementById("create-table").onclick = () => tryCatch(createTable);
-    //  document.getElementById("sideload-msg").style.display = "none";
-    document.getElementById("app-body").style.display = "flex";
-    document.getElementById("open-dialog").onclick = openDialog;
-    document.getElementById("exchangeRate").onclick = openFXRate;
-    document.getElementById("build-new").onclick = openBuildNew;
-    document.getElementById("create-table1").onclick = () => tryCatch(openTrends);
-
-    document.addEventListener("popupLoaded", function () {
-      loadTranslations();
-    });
+    document.getElementById("app-body")!.style.display = "flex";
+    document.getElementById("login-dialog")!.onclick = openLogin;
+    document.getElementById("create-table")!.onclick = createCashPosition;
+    document.getElementById("exchangeRate")!.onclick = openFXRate;
+    document.getElementById("build-new")!.onclick = openBuildNew;
+    document.getElementById("create-table1")!.onclick = () => tryCatch(openTrends);
   }
 });
-async function loadData() {
-  try {
-    // Fetch account data
 
-    const accountData = await fetchInitData();
-
-    localStorage.setItem("accountList", JSON.stringify(accountData));
-
-    // Fetch currency data
-    const currencyData = await fetchCurrencyData();
-    localStorage.setItem("currencyList", JSON.stringify(currencyData));
-    // Ensure context is synced before opening the dialog
-  } catch (error) {
-    console.error("Error in openTrends:", error);
+async function handleUserActivity() {
+  const now = Date.now();
+  if (now - lastExtendedAt > EXTEND_SESSION_TIME) {
+    lastExtendedAt = now;
+    sessionService.extendSession();
   }
 }
-function loadTranslations() {
-  const texts = translations["en"]; // Default to English
-  document.querySelectorAll("[data-i18n]").forEach((element) => {
-    const key = element.getAttribute("data-i18n") as string;
-    const text = key.split(".").reduce((obj, keyPart) => obj && obj[keyPart], texts);
-    if (text) element.textContent = text;
-  });
+
+async function extendSession() {
+  document.addEventListener("mousemove", handleUserActivity);
+  document.addEventListener("keydown", handleUserActivity);
+  document.addEventListener("scroll", handleUserActivity);
+  document.addEventListener("touchstart", handleUserActivity);
+}
+
+async function initialize() {
+  const initData = JSON.stringify(await api.get(API_URLS.GET_INIT_DATA()));
+  let initialDataList = JSON.parse(initData).initData;
+  let accountList = JSON.parse(initData).initData.accountInfoList;
+  await OfficeRuntime.storage.setItem("initialData", JSON.stringify(initialDataList));
+  await OfficeRuntime.storage.setItem("accountList", JSON.stringify(accountList));
+
+  const canCreatePayment = JSON.stringify(await api.get(API_URLS.CAN_CREATE_PAYMENT()));
+  let createPaymentList: CanCreatePayment[] = JSON.parse(canCreatePayment);
+  await OfficeRuntime.storage.setItem("canCreatePayment", JSON.stringify(createPaymentList));
+
+  const isUserAuthorized = JSON.stringify(await api.get(API_URLS.IS_USER_AUTHORIZED()));
+  let userAuthorized: UserAuthorized[] = JSON.parse(isUserAuthorized);
+  await OfficeRuntime.storage.setItem("isUserAuthorized", JSON.stringify(userAuthorized));
+
+  const paymentTemplateList = JSON.stringify(await api.get(API_URLS.GET_PAYMENT_TEMPLATE()));
+  let paymentTemplates: PaymentTemplate[] = JSON.parse(paymentTemplateList).paymentsTemplateList.paymentsTemplates;
+  await OfficeRuntime.storage.setItem("paymentTemplates", JSON.stringify(paymentTemplates));
+
+  const currencyList = JSON.stringify(await api.get(API_URLS.GET_CURRENCIES()));
+  let currencies: Currency[] = JSON.parse(currencyList).currencyList.exchangeCurrency;
+  await OfficeRuntime.storage.setItem("currencies", JSON.stringify(currencies));
 }
 
 async function createTable() {
   await Excel.run(async (context) => {
-    const proxyUrl = "https://cors-anywhere.herokuapp.com/";
-    const strQuery = `https://apirequest.azure-api.net/REST_APIs/Logon&Logoff/Initialize/GetInitData`;
-    const response = await fetch(proxyUrl + strQuery, {
-      method: "POST",
-      body: JSON.stringify('{"getInitData": {"request": ""}}'),
-    });
+    let noaaData: any[] = [];
+
     const currentWorksheet = context.workbook.worksheets.getActiveWorksheet();
     await context.sync();
-    const rawJson: string = await response.json();
-    // Translate the raw JSON into a usable state.
-    const stringifiedJson = JSON.stringify(rawJson);
-    // Note that we're only taking the data part of the JSON and excluding the metadata.
-    let noaaData: NOAAData[] = JSON.parse(stringifiedJson).getInitDataResponse.initData.accountInfoList;
-    localStorage.setItem("accountList", JSON.stringify(noaaData));
-    let transactions: Transactions[] =
-      JSON.parse(stringifiedJson).getInitDataResponse.initData.uiExtracts.extractTransTypeList;
-    localStorage.setItem("transactionList", JSON.stringify(transactions));
-    let paymentMethods: PaymentMethod[] =
-      JSON.parse(stringifiedJson).getInitDataResponse.initData.uiExtracts.paymentMethodsList;
-    localStorage.setItem("paymentMethodList", JSON.stringify(paymentMethods));
-    const currencyQuery = `https://apirequest.azure-api.net/REST_APIs/Masterdata/GetAllAvailableCurrencies`;
-    const currencyResponse = await fetch(proxyUrl + currencyQuery, {
-      method: "POST",
-      body: JSON.stringify('{"getAllAvailableCurrencies": {"request": ""}}'),
-    });
-    const currencyJson: string = await currencyResponse.json();
-    // Translate the raw JSON into a usable state.
-    const stringCurrencyJson = JSON.stringify(currencyJson);
-    // Note that we're only taking the data part of the JSON and excluding the metadata.
-    let currencyData: CurrencyData[] = JSON.parse(stringCurrencyJson).getAllAvailableCurrenciesResponse.currencyList;
-    localStorage.setItem("currencyList", JSON.stringify(currencyData));
-    localStorage.removeItem("remindersList");
-    let remindersList: Reminders[] = [
-      {
-        accountNumber: "",
-        threshold: "",
-        action: "",
-        template: "",
-        from: "",
-        to: "",
-      },
-    ];
-    localStorage.setItem("remindersList", JSON.stringify(remindersList));
-    // Create table headers and format them to stand out.
+
     let headers = [["Account name", "Account number"]];
     let headerRange = currentWorksheet.getRange("A1:B1");
     headerRange.values = headers;
@@ -104,129 +94,100 @@ async function createTable() {
     headerRange.format.font.bold = true;
     headerRange.format.autofitColumns();
 
-    // Insert all the data in rows from JSON.
     let noaaDataCount = noaaData.length;
-    let dataToEnter = [[], []];
+    let dataToEnter: any[][] = [];
+
     for (let i = 0; i < noaaDataCount; i++) {
       let currentDataPiece = noaaData[i];
-      dataToEnter[i] = [currentDataPiece.accountName, "'" + currentDataPiece.accountNumber];
+      dataToEnter[i] = [currentDataPiece.accountName, "" + currentDataPiece.accountNumber];
     }
 
-    let dataRange = currentWorksheet.getRange("A2:B" + String(noaaDataCount + 1)); /* +1 to account for the title row */
+    let dataRange = currentWorksheet.getRange(`A2:B${noaaDataCount + 1}`);
     dataRange.values = dataToEnter;
-    // dataRange.getColumn(0).numberFormatLocal = "[$-en-US]mm/dd/yyyy hh:mm AM/PM;@";
 
-    /*   let chart = currentWorksheet.charts.add(Excel.ChartType.xyscatterSmooth, dataRange);
-    chart.title.text = "Balances";
-    chart.top = 0;
-    chart.left = 200;
-    chart.width = 500;
-    chart.height = 300;
-    chart.axes.valueAxis.showDisplayUnitLabel = false;
-    chart.axes.categoryAxis.textOrientation = 60;
-    chart.legend.visible = false; */
-
-    // Add a comment with the data attribution.
     currentWorksheet.comments.add("A1", `This data was taken from the JP Morgan openAPI on ${new Date(Date.now())}.`);
-    /**
-     * An interface to wrap the parts of the JSON we need.
-     * These properties must match the names used in the JSON.
-     */
-    interface NOAAData {
-      accountName: string;
-      accountNumber: string;
-      currency: string;
-    }
-
-    interface Transactions {
-      code: string;
-      description: string;
-      transactionsType: string;
-    }
-
-    interface CurrencyData {
-      currency: string;
-    }
-
-    interface PaymentMethod {
-      code: string;
-      description: string;
-      methodType: Number;
-    }
-
-    interface Reminders {
-      accountNumber: string;
-      threshold: string;
-      action: string;
-      template: string;
-      from: string;
-      to: string;
-    }
   });
 }
 
-async function tryCatch(callback) {
+async function tryCatch(callback: Function) {
   try {
     await callback();
   } catch (error) {
-    /* empty */
+    // empty
   }
 }
 
-let dialog = null;
+async function createCashPosition() {
+  await showProcessingDialog();
+  try {
+    await cashPosition.populateExcel();
+    console.log("Excel populated successfully.");
+  } catch (error) {
+    console.log("Failed to populate Excel:", error);
+  } finally {
+    setTimeout(() => {
+      closeProcessingDialog();
+    }, 1000);
+  }
+}
 
-function openDialog() {
+let processingDialog: Office.Dialog;
+let dialog: Office.Dialog;
+
+function showProcessingDialog() {
   Office.context.ui.displayDialogAsync(
-    "https://localhost:3000/popup.html",
-    { height: 45, width: 55 }
+    window.location.origin + "/splash.html",
+    { height: 30, width: 30, displayInIframe: true },
+    function (asyncResult) {
+      if (asyncResult.status === Office.AsyncResultStatus.Succeeded) {
+        processingDialog = asyncResult.value;
+      } else {
+        Logger.error("Failed to open dialog", asyncResult.error.message);
+      }
+    }
+  );
+}
 
-    // function (result) {
-    //   dialog = result.value;
-    //   dialog.addEventHandler(Office.EventType.DialogMessageReceived, processMessage);
-    // }
+function closeProcessingDialog() {
+  if (processingDialog) {
+    processingDialog.close();
+  }
+}
+
+function openLogin() {
+  const loginUrl = "https://localhost:3000/login.html";
+  Office.context.ui.displayDialogAsync(
+    loginUrl,
+    { height: 55, width: 55 },
+    function (result) {
+      if (result.status === Office.AsyncResultStatus.Succeeded) {
+        const dialog = result.value;
+        dialog.addEventHandler(Office.EventType.DialogEventReceived, (event) => {});
+        console.log("Popup opened successfully");
+      } else {
+        console.log("Failed to open popup");
+      }
+    }
   );
 }
 
 function openFXRate() {
   Office.context.ui.displayDialogAsync(
-    "https://localhost:3000/exRate.html",
-    { height: 70, width: 40 },
-
-    function (result) {
-      const dialog = result.value;
-
-      dialog.addEventHandler(Office.EventType.DialogMessageReceived, (message) => {
-        const jsonObject = JSON.parse(message.message);
-
-        if (jsonObject.type === "FX_RATES" && Array.isArray(jsonObject.data)) {
-          addWorksheetAndWriteValues(jsonObject.data);
-        } else {
-          console.warn("Invalid FX data received:", jsonObject.data);
-        }
-
-        dialog.close();
-      });
-    }
-  );
-}
-
-function openBuildNew() {
-  Office.context.ui.displayDialogAsync(
-    "https://localhost:3000/buildNew.html",
-    { height: 80, width: 65 },
+    window.location.origin + "/fxRate.html",
+    { height: 81, width: 65 },
     function (result) {
       dialog = result.value;
-
-      dialog.addEventHandler(Office.EventType.DialogMessageReceived, (message) => {
-        const jsonObject = JSON.parse(message.message);
-
-        if (jsonObject.type === "CLOSE_DIALOG") {
-          dialog.close(); //  Close the dialog from taskpane
-          return;
+      dialog.addEventHandler(Office.EventType.DialogMessageReceived, async (arg) => {
+        const message = JSON.parse(arg.message);
+        if (message.type === "Ready") {
+          const currencies = await getLocalStorageData("currencies");
+          dialog.messageChild(JSON.stringify({ type: "currencies", currencies }));
         }
-
-        if (jsonObject.type === "FX_RATES") {
-          addWorksheetAndWriteValues(jsonObject.data);
+        if (message.type === "Close") {
+          dialog.close();
+        }
+        if (message.type === "Build") {
+          exchangeRate.populateExchangeRates(message.fxData);
           dialog.close();
         }
       });
@@ -234,58 +195,70 @@ function openBuildNew() {
   );
 }
 
-async function openTrends(): Promise<void> {
+async function getLocalStorageData(key: string): Promise<any[]> {
+  const outputList = await OfficeRuntime.storage.getItem(key);
+  return JSON.parse(outputList) || [];
+}
+
+async function openBuildNew() {
   Office.context.ui.displayDialogAsync(
-    "https://localhost:3000/trends.html",
-    { height: 80, width: 65 },
-    function (result) {
-      const dialog = result.value;
-
-      dialog.addEventHandler(Office.EventType.DialogMessageReceived, (message) => {
-        const jsonObject = JSON.parse(message.message);
-
-        if (jsonObject.type === "CLOSE_DIALOG") {
-          dialog.close(); //  Close the dialog from taskpane
-          return;
+    window.location.origin + "/buildNew.html",
+    { height: 81, width: 65 },
+    async (result) => {
+      dialog = result.value;
+      dialog.addEventHandler(Office.EventType.DialogMessageReceived, async (arg) => {
+        const message = JSON.parse(arg.message);
+        if (message.type === "Ready") {
+          const initialData = await getLocalStorageData("initialData");
+          const currencies = await getLocalStorageData("currencies");
+          dialog.messageChild(JSON.stringify({ type: "initialData", initialData }, { type: "currencies", currencies }));
         }
       });
     }
   );
 }
 
-function processMessage(arg) {
-  document.getElementById("user-name").innerHTML = arg.message;
+function openTrends() {
+  Office.context.ui.displayDialogAsync(
+    window.location.origin + "/trends.html",
+    { height: 81, width: 65 },
+    function (result) {
+      dialog = result.value;
+      dialog.addEventHandler(Office.EventType.DialogMessageReceived, async (arg) => {
+        const message = JSON.parse(arg.message);
+        if (message.type === "Ready") {
+          const accountList = await getLocalStorageData("accountList");
+          dialog.messageChild(JSON.stringify({ type: "accountList", accountList }));
+        }
+        if (message.type === "Close") {
+          dialog.close();
+        }
+        if (message.type === "Build") {
+          exchangeRate.populateExchangeRates(message.fxData);
+          dialog.close();
+        }
+      });
+    }
+  );
+}
+
+function processMessage(arg: any) {
+  document.getElementById("user-name")!.innerHTML = arg.message;
   dialog.close();
 }
 
-export async function addWorksheetAndWriteValues(currencyList) {
+async function addWorksheetAndWriteValues(currencies: any) {
   try {
-    const data = Array.isArray(currencyList) ? currencyList : [currencyList];
-
     await Excel.run(async (context) => {
       const sheet = context.workbook.worksheets.getActiveWorksheet();
       sheet.activate();
-
-      // 🔄 Clear the whole sheet safely
-      const usedRange = sheet.getUsedRange();
-      usedRange.load("address");
       await context.sync();
-      usedRange.clear();
-
-      const output = [["From Currency", "Target Currency", "Rate"]];
-      data.forEach((item) => {
-        output.push([item.fromCurrency, item.toCurrency, item.fxRate]);
-      });
-
-      const range = sheet.getRangeByIndexes(0, 0, output.length, output[0].length);
-      range.values = output;
-      const headerRange = sheet.getRangeByIndexes(0, 0, 1, output[0].length);
-      headerRange.format.font.bold = true;
-      headerRange.format.fill.color = "#D9D9D9"; // light grey
-
+      sheet.getRange("A1").values = [
+        ["The exchange rate for " + currencies.fromCurrency + " and " + currencies.toCurrency + " is 0.91"],
+      ];
       await context.sync();
     });
   } catch (error) {
-    console.error("Excel write failed:", error);
+    // empty
   }
 }

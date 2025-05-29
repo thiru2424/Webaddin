@@ -1,8 +1,8 @@
 import { getSortKey } from "./sortAccounts";
 import { renderTable } from "./renderTable";
-import { selectedAccountsData, availableAccountsData } from "../../dialogues/trends";
+import { selectedAccountsData, availableAccountsData } from "../../taskpane/popup/trends";
 import { isFilterActive, filterAvailable } from "./filterAccounts";
-import { updateAccountCount } from "../../dialogues/trend-service/setupTableListeners";
+import { updateAccountCount } from "./setupTableListeners";
 import { updateBuildButtonState } from "./updateBuildButtonState";
 export function moveSelected(sourceTable: HTMLElement, targetTable: HTMLElement, isAccount: boolean) {
   const selectedRows = Array.from(sourceTable.querySelectorAll(".selected"));

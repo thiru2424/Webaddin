@@ -1,0 +1,40 @@
+{
+  "startDate": 1748044800000,
+  "endDate": 1748467200000,
+  "consolidatedTrendRequestList": {
+    "account": [
+      {
+        "bankId": "02100002",
+        "dataRetention": null,
+        "branchId": " ",
+        "accountId": "000000001021389"
+      },
+      {
+        "bankId": "02100002",
+        "dataRetention": null,
+        "branchId": " ",
+        "accountId": "000000001058488"
+      },
+      {
+        "bankId": "02100002",
+        "dataRetention": null,
+        "branchId": " ",
+        "accountId": "000000001099999"
+      },
+      {
+        "bankId": "02100002",
+        "dataRetention": null,
+        "branchId": " ",
+        "accountId": "000000001088888"
+      },
+      {
+        "bankId": "02100002",
+        "dataRetention": null,
+        "branchId": " ",
+        "accountId": "000000001077777"
+      }
+    ]
+  },
+  "createTrendReport": false,
+  "dateType": "DATE_RANGE"
+}

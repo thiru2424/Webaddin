@@ -1,0 +1,179 @@
+{
+  "trendDateList": [
+    {
+      "businessDate": 1748044800000,
+      "trenDataResponseList": [
+        {
+          "trendDataList": [
+            {
+              "businessDate": 1748044800000,
+              "totalDebitsAmount": "0.00",
+              "totalCreditsAmount": "1000.00",
+              "closingLedger": "9000000.00"
+            }
+          ],
+          "account": {
+            "bankId": "02100002",
+            "dataRetention": null,
+            "branchId": " ",
+            "accountId": "000000001021389"
+          }
+        },
+        {
+          "trendDataList": [
+            {
+              "businessDate": 1748044800000,
+              "totalDebitsAmount": "0.00",
+              "totalCreditsAmount": "1000.00",
+              "closingLedger": "9000000.00"
+            }
+          ],
+          "account": {
+            "bankId": "02100002",
+            "dataRetention": null,
+            "branchId": " ",
+            "accountId": "000000001058488"
+          }
+        },
+        {
+          "trendDataList": [
+            {
+              "businessDate": 1748044800000,
+              "totalDebitsAmount": "0.00",
+              "totalCreditsAmount": "1000.00",
+              "closingLedger": "9000000.00"
+            }
+          ],
+          "account": {
+            "bankId": "02100002",
+            "dataRetention": null,
+            "branchId": " ",
+            "accountId": "000000001099999"
+          }
+        },
+        {
+          "trendDataList": [
+            {
+              "businessDate": 1748044800000,
+              "totalDebitsAmount": "0.00",
+              "totalCreditsAmount": "1000.00",
+              "closingLedger": "9000000.00"
+            }
+          ],
+          "account": {
+            "bankId": "02100002",
+            "dataRetention": null,
+            "branchId": " ",
+            "accountId": "000000001088888"
+          }
+        },
+        {
+          "trendDataList": [
+            {
+              "businessDate": 1748044800000,
+              "totalDebitsAmount": "0.00",
+              "totalCreditsAmount": "1000.00",
+              "closingLedger": "9000000.00"
+            }
+          ],
+          "account": {
+            "bankId": "02100002",
+            "dataRetention": null,
+            "branchId": " ",
+            "accountId": "000000001077777"
+          }
+        }
+      ]
+    },
+    {
+      "businessDate": 1748131200000,
+      "trenDataResponseList": [
+        {
+          "trendDataList": [
+            {
+              "businessDate": 1748131200000,
+              "totalDebitsAmount": "0.00",
+              "totalCreditsAmount": "1000.00",
+              "closingLedger": "9000000.00"
+            }
+          ],
+          "account": {
+            "bankId": "02100002",
+            "dataRetention": null,
+            "branchId": " ",
+            "accountId": "000000001021389"
+          }
+        },
+        {
+          "trendDataList": [
+            {
+              "businessDate": 1748131200000,
+              "totalDebitsAmount": "0.00",
+              "totalCreditsAmount": "1000.00",
+              "closingLedger": "9000000.00"
+            }
+          ],
+          "account": {
+            "bankId": "02100002",
+            "dataRetention": null,
+            "branchId": " ",
+            "accountId": "000000001058488"
+          }
+        },
+        {
+          "trendDataList": [
+            {
+              "businessDate": 1748131200000,
+              "totalDebitsAmount": "0.00",
+              "totalCreditsAmount": "1000.00",
+              "closingLedger": "9000000.00"
+            }
+          ],
+          "account": {
+            "bankId": "02100002",
+            "dataRetention": null,
+            "branchId": " ",
+            "accountId": "000000001099999"
+          }
+        },
+        {
+          "trendDataList": [
+            {
+              "businessDate": 1748131200000,
+              "totalDebitsAmount": "0.00",
+              "totalCreditsAmount": "1000.00",
+              "closingLedger": "9000000.00"
+            }
+          ],
+          "account": {
+            "bankId": "02100002",
+            "dataRetention": null,
+            "branchId": " ",
+            "accountId": "000000001088888"
+          }
+        },
+        {
+          "trendDataList": [
+            {
+              "businessDate": 1748131200000,
+              "totalDebitsAmount": "0.00",
+              "totalCreditsAmount": "1000.00",
+              "closingLedger": "9000000.00"
+            }
+          ],
+          "account": {
+            "bankId": "02100002",
+            "dataRetention": null,
+            "branchId": " ",
+            "accountId": "000000001077777"
+          }
+        }
+      ]
+    }
+  ],
+  "reason": null,
+  "success": true,
+  "failureMsg": null,
+  "errorMsgList": null,
+  "userId": "reportmcuucashpyu1"
+}

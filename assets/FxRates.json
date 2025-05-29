@@ -1,0 +1,45 @@
+{
+  "fontName": "Aptos Narrow",
+  "fxRateHeaders": [
+    {
+      "cell": "A",
+      "value": "ExchangeRates",
+      "textBackground": "#000000",
+      "cellBackground": "#FFFFFF",
+      "font": 11,
+      "bold": false,
+      "align": "Left"
+    },
+    {
+      "cell": "A",
+      "value": "As Of",
+      "isTimeStamp": true,
+      "textBackground": "#000000",
+      "cellBackground": "#FFFFFF",
+      "font": 11,
+      "bold": false,
+      "align": "Left",
+      "isNote": true,
+      "noteText": "ExchangeRateLastRefreshed"
+    },
+    {
+      "cell": "A",
+      "value": "Note: Rates are estimates and should be used for informational purposes only. These may not reflect rates that are used when creating payments.",
+      "textBackground": "#000000",
+      "cellBackground": "#FFFFFF",
+      "font": 11,
+      "bold": false,
+      "italic": true,
+      "align": "Left"
+    }
+  ],
+  "tableHeader": {
+    "cell": "A6:C6",
+    "headerColumns": ["From Currency", "Target Currency", "Rate"],
+    "textBackground": "#000000",
+    "cellBackground": "#F2F2F2",
+    "font": 11,
+    "bold": false,
+    "align": "Left"
+  }
+}

@@ -1,5 +1,5 @@
 import { isFilterActive, filterAvailable } from "./filterAccounts";
-import { availableAccountsData, selectedAccountsData } from "../../dialogues/trends";
+import { availableAccountsData, selectedAccountsData } from "../../taskpane/popup/trends";
 import { renderTable } from "./renderTable";
 import { sortTable } from "./sortAccounts";
 import { getSortKey } from "./sortAccounts";

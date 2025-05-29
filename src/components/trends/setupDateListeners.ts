@@ -1,4 +1,4 @@
-import { validateDates } from "../../utils/trends/validateDates";
+import { validateDates } from "./validateDates";
 export function setupDateUI() {
   const dateOption = document.getElementById("dateOption") as HTMLSelectElement;
   const startDate = document.getElementById("startDate") as HTMLInputElement;

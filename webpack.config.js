@@ -13,12 +13,12 @@ module.exports = async (env, options) => {
     devtool: "source-map",
     entry: {
       polyfill: ["core-js/stable", "regenerator-runtime/runtime"],
-      taskpane: ["./src/taskpane/taskpane.ts", "./src/taskpane/taskpane.html"],
+      taskpane: ["./src/taskpane/Taskpane.ts", "./src/taskpane/taskpane.html"],
       commands: "./src/commands/commands.ts",
-      popup: "./src/dialogues/popup.js",
-      exRate: "./src/dialogues/exRate.ts",
-      buildNew: "./src/dialogues/buildNew.ts",
-      trends: "./src/dialogues/trends.ts",
+      popup: "./src/taskpane/popup/Popup.js",
+      exRate: "./src/taskpane/popup/ExRate.ts",
+      buildNew: "./src/taskpane/popup/BuildNew.ts",
+      trends: "./src/taskpane/popup/Trends.ts",
     },
     output: {
       clean: true,
@@ -66,17 +66,17 @@ module.exports = async (env, options) => {
       }),
       new HtmlWebpackPlugin({
         filename: "popup.html",
-        template: "./src/dialogues/popup.html",
+        template: "./src/taskpane/popup/popup.html",
         chunks: ["polyfill", "popup"],
       }),
       new HtmlWebpackPlugin({
         filename: "exRate.html",
-        template: "./src/dialogues/exRate.html",
+        template: "./src/taskpane/popup/exRate.html",
         chunks: ["polyfill", "exRate"],
       }),
       new HtmlWebpackPlugin({
         filename: "buildNew.html",
-        template: "./src/dialogues/buildNew.html",
+        template: "./src/taskpane/popup/buildNew.html",
         chunks: ["polyfill", "buildNew"],
       }),
       new HtmlWebpackPlugin({
@@ -86,7 +86,7 @@ module.exports = async (env, options) => {
       }),
       new HtmlWebpackPlugin({
         filename: "trends.html",
-        template: "./src/dialogues/trends.html",
+        template: "./src/taskpane/popup/trends.html",
         chunks: ["polyfill", "trends"],
       }),
       new CopyWebpackPlugin({
